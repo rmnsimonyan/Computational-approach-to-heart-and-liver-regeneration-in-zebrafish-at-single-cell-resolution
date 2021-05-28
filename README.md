@@ -12,3 +12,11 @@ References
 7.	J. He, H. Lu, Q. Zou, L. Luo, Regeneration of liver after extreme hepatocyte loss occurs mainly via biliary transdifferentiation in zebrafish. Gastroenterology 146, 789-800 e788 (2014).  
 8.	J. H. Belling, W. Hofmeister, D. C. Andersen, A Systematic Exposition of Methods used for Quantification of Heart Regeneration after Apex Resection in Zebrafish. Cells 9(3), 548 (2020). 
 9.	K. D. Poss, Getting to the heart of regeneration in zebrafish. In Seminars in cell & developmental biology 18(1), 36-45 (2007). 
+
+
+
+How to run:
+
+1. sh 10XGentsv_and_mtx_to_csv.sh
+2. Rscript ...R
+3. 
