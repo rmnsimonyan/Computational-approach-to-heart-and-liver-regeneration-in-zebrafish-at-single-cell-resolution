@@ -17,6 +17,16 @@ References
 
 How to run:
 
+- Seurate clustering script
+1. 
+
+- scPopcorn clustering
 1. sh 10XGentsv_and_mtx_to_csv.sh
-2. Rscript ...R
-3. 
+2. python weird-to-normal-table.py 
+3. python scPopcorn.py
+4. (perform DE + GSEA with Seurat for the outputted clusters)
+
+- SOM clustering
+1. sh 10XGentsv_and_mtx_to_csv.sh
+2. python weird-to-normal-table.py 
+3. Rscipt SOM.R
