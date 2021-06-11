@@ -18,7 +18,7 @@ References
 How to run:
 
 - Seurate clustering script
-1. 
+1. Seurat_analysis.R
 
 - scPopcorn clustering
 1. sh 10XGentsv_and_mtx_to_csv.sh
