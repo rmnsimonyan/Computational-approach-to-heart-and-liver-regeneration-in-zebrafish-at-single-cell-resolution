@@ -20,7 +20,7 @@ mat = merge(HEPfin,MTZablfin,by="row.names",all=TRUE)
 rownames(mat) = mat[,1]
 mat = mat[,-1]
 
-#mat = read.csv("exptable.csv", header = TRUE, row.names = 1)
+#mat = read.csv("exptable_genenames.csv", header = TRUE, row.names = 1)
 
 genenumber = c()
 for(i in colnames(mat)){
@@ -30,6 +30,8 @@ for(i in colnames(mat)){
 mat[is.na(mat)] = 0
 
 mat = mat[,names(genenumber[which(!genenumber<200)])]
+
+mat = mat[,which(mat["fabp10a",]>0)]
 
 env <- opossom.new(list(dataset.name = "SD.som.maf.Diagnosis_new.onset",
                         
