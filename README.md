@@ -1,4 +1,4 @@
-# Computational-approach-to-heart-and-liver-regeneration-in-zebrafish-at-single-cell-resolution
+# Computational approach to heart and liver regeneration in zebrafish at single cell resolution
 
 Lower vertebrates such as zebrafish have a capacity for complete regeneration of both a damaged liver, and an injured heart, which is accomplished through cell division of existing hepatocytes [1] and cardiomyocytes [2], respectively. Notably, these terminally differentiated cells hold the capacity to re-enter cell division upon damage. The molecular cascades controlling hepatocyte proliferation following injury are intensely investigated [3, 4], whereas there is still little known about the transcriptional network that drives re-entry of cardiomyocytes to the cell cycle [5]. This project aims to identify specific and common factors re-initiating cell proliferation of differentiated cells using cardiomyocytes and hepatocytes in zebrafish after injury as experimental models [6, 7, 8, 9] by comparatively analyzing the single cell RNA sequencing data of dividing zebrafish cardiomyocytes and hepatocytes.
 
