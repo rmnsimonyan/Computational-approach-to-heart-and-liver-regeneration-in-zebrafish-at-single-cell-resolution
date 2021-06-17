@@ -19,12 +19,14 @@ VlnPlot(HEP, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 MTZabl[["percent.mt"]] <- PercentageFeatureSet(MTZabl, pattern = "^mt-")
 VlnPlot(MTZabl, features = c("nFeature_RNA", "nCount_RNA", "percent.mt"), ncol = 3)
 
-
 #Clustering
 
 # QC
-qHEP <- subset(HEP, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
-qMTZabl <- subset(MTZabl, subset = nFeature_RNA > 200 & nFeature_RNA < 2500 & percent.mt < 5)
+qHEP <- subset(HEP, subset = nFeature_RNA > 200)
+qMTZabl <- subset(MTZabl, subset = nFeature_RNA > 200) 
+
+qHEP = subset(qHEP, subset = fabp10a > 1)
+qMTZabl = subset(qMTZabl, subset = fabp10a > 1)
 
 #Normalize abd scale
 qHEP <- NormalizeData(qHEP)
@@ -146,6 +148,71 @@ VlnPlot(qHEP, features = c("atf5a",
                            "asgrl1",
                            "itih3a.1"))
 
+#mitotic cell cycle genes from GOterm from GSEA analysis results
+VlnPlot(qMTZabl, features = c("btg1",
+  "tubb4b",
+  "vcp",
+  "ran",
+  "tuba8l2",
+  "si:dkey-79d12.5",
+  "chmp4ba",
+  "btg2",
+  "ccni"))
 
 
+
+# Integrated clustering
+# install.packages("https://seurat.nygenome.org/src/contrib/ifnb.SeuratData_3.0.0.tar.gz", repos = NULL, type = "source") 
+library(SeuratData)
+library(patchwork)
+library(ifnb.SeuratData)
+
+
+# Set up control object
+HEPq <- subset(HEP, subset = nFeature_RNA > 200 & fabp10a > 1)
+HEPq$stim <- "HEP"
+HEPq <- NormalizeData(HEPq, verbose = FALSE)
+HEPq <- FindVariableFeatures(HEPq, selection.method = "vst", nfeatures = 2000)
+
+# Set up stimulated object
+MTZablq <- subset(MTZabl, subset = nFeature_RNA > 200 & fabp10a > 1)
+MTZablq$stim <- "MTZablq"
+MTZablq <- NormalizeData(MTZablq, verbose = FALSE)
+MTZablq <- FindVariableFeatures(MTZablq, selection.method = "vst", nfeatures = 2000)
+
+immune.anchors <- FindIntegrationAnchors(object.list = list(HEPq, MTZablq), dims = 1:20)
+
+immune.combined <- IntegrateData(anchorset = immune.anchors, dims = 1:20)
+
+# specify that we will perform downstream analysis on the corrected data note that the original
+# unmodified data still resides in the 'RNA' assay
+DefaultAssay(immune.combined) <- "integrated"
+
+# Run the standard workflow for visualization and clustering
+immune.combined <- ScaleData(immune.combined, verbose = FALSE)
+immune.combined <- RunPCA(immune.combined, npcs = 30, verbose = FALSE)
+immune.combined <- RunUMAP(immune.combined, reduction = "pca", dims = 1:30)
+immune.combined <- FindNeighbors(immune.combined, reduction = "pca", dims = 1:30)
+immune.combined <- FindClusters(immune.combined, resolution = 0.5)
+
+# Visualization
+p1 <- DimPlot(immune.combined, reduction = "umap", group.by = "stim")
+p2 <- DimPlot(immune.combined, reduction = "umap", label = TRUE, repel = TRUE)
+p1 + p2
+
+
+DimPlot(immune.combined, reduction = "umap", split.by = "stim")
+
+
+ewp2 <- GSEA(qHEP)#, TERM2GENE = wpid2gene, TERM2NAME = wpid2name, verbose=FALSE)
+head(ewp2)
+
+ego3 <- gseGO(geneList     = row.names(cluster2.markers),
+              organism     = "org.Dr.eg.db",
+              ont          = "BP",
+              nPerm        = 1000,
+              minGSSize    = 100,
+              maxGSSize    = 500,
+              pvalueCutoff = 0.05,
+              verbose      = FALSE)
 
