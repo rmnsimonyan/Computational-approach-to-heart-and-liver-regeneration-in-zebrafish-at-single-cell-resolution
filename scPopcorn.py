@@ -7,11 +7,11 @@ from scpopcorn import SingleCellData
 
 # read in RNA-seq datasets
 
-File1 = "ARfin.txt"
+File1 = "data/data1.txt"
 Test1 = SingleCellData()
 Test1.ReadData_SeuratFormat(File1)
 
-File2 = "Shamfin.txt"
+File2 = "data/data2.txt"
 Test2 = SingleCellData()
 Test2.ReadData_SeuratFormat(File2)
 
