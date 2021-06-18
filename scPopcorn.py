@@ -24,7 +24,8 @@ Test2.Normalized_per_Cell()
 Test2.FindHVG()
 Test2.Log1P()
 
-# combine datasets and set number of supercells for each dataset
+# combine datasets and set number of supercells for each dataset. 
+# The number of super cell can be chosen as following. If you have N cells, then you can define the number of super cell M, by letting N/M between 20 and 30.
 
 NumSuperCell_Test1 = 50
 NumSuperCell_Test2 = 50
