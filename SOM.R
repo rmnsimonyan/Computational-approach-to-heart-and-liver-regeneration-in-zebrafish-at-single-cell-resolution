@@ -9,29 +9,25 @@ rm(list = ls())
 library(oposSOM)
 library(stringr)
 
+HEPfin = read.delim("data/data1.txt", header = TRUE, row.names = 1)
 
-HEPfin = read.csv("exptableHEP.csv", header = TRUE, row.names = 1)
-colnames(HEPfin) = paste0("HEP_", colnames(HEPfin))
+MTZablfin = read.delim("data/data2.txt", header = TRUE, row.names = 1)
 
-MTZablfin = read.csv("exptableMTZ.csv", header = TRUE, row.names = 1)
-colnames(MTZablfin) = paste0("MTZabl_", colnames(MTZablfin))
 
 mat = merge(HEPfin,MTZablfin,by="row.names",all=TRUE)
 rownames(mat) = mat[,1]
 mat = mat[,-1]
+mat[is.na(mat)] = 0
 
-#mat = read.csv("exptable_genenames.csv", header = TRUE, row.names = 1)
+#mat = read.csv("exptable.csv", header = TRUE, row.names = 1)
 
 genenumber = c()
 for(i in colnames(mat)){
-  genenumber[i] = sum(!is.na(mat[,i]))
+  genenumber[i] = sum(mat[,i]>0)
 }
 
-mat[is.na(mat)] = 0
 
 mat = mat[,names(genenumber[which(!genenumber<200)])]
-
-mat = mat[,which(mat["fabp10a",]>0)]
 
 env <- opossom.new(list(dataset.name = "SD.som.maf.Diagnosis_new.onset",
                         
@@ -56,7 +52,7 @@ env <- opossom.new(list(dataset.name = "SD.som.maf.Diagnosis_new.onset",
                                                   "difference.analysis" = T,
                                                   "psf.analysis" = F ),
                         
-                        standard.spot.modules = "overexpression",
+                        standard.spot.modules = "group.overexpression",
                         
                         spot.coresize.modules = 7,
                         spot.threshold.modules = 0.95,
@@ -75,3 +71,20 @@ names(labels) = colnames(mat)
 env$group.labels <- labels
 
 opossom.run(env)
+
+#Enrich one of the group overexpression spots as an example
+
+organism = "org.Hs.eg.db"
+#BiocManager::install(organism, character.only = TRUE)
+
+library(organism, character.only = TRUE)
+library(clusterProfiler)
+
+go_enrichE <- enrichGO(gene = env$spot.list.group.overexpression$spots$A$genes,
+                       OrgDb = organism, 
+                       keyType = "GENENAME",
+                       readable = T,
+                       ont = "ALL",
+                       pvalueCutoff = 0.05, 
+                       qvalueCutoff = 0.10)
+print(go_enrichE[,3])
