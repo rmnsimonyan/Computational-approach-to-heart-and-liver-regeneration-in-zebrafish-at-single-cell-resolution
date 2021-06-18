@@ -1,32 +1,32 @@
 # Computational approach to heart and liver regeneration in zebrafish at single cell resolution
 
-Lower vertebrates such as zebrafish have a capacity for complete regeneration of both a damaged liver, and an injured heart, which is accomplished through cell division of existing hepatocytes [1] and cardiomyocytes [2], respectively. Notably, these terminally differentiated cells hold the capacity to re-enter cell division upon damage. The molecular cascades controlling hepatocyte proliferation following injury are intensely investigated [3, 4], whereas there is still little known about the transcriptional network that drives re-entry of cardiomyocytes to the cell cycle [5]. This project aims to identify specific and common factors re-initiating cell proliferation of differentiated cells using cardiomyocytes and hepatocytes in zebrafish after injury as experimental models [6, 7, 8, 9] by comparatively analyzing the single cell RNA sequencing data of dividing zebrafish cardiomyocytes and hepatocytes.
-
-References
-1.	S. Wang, S. R. Miller, E. A. Ober, K. C. Sadler, Making It New Again: Insight Into Liver Development, Regeneration, and Disease From Zebrafish Research. Curr Top Dev Biol 124, 161-195 (2017). 
-2.	K. Kikuchi, Dedifferentiation, Transdifferentiation, and Proliferation: Mechanisms Underlying Cardiac Muscle Regeneration in Zebrafish. Curr Pathobiol Rep 3, 81-88 (2015). 
-3.	G. K. Michalopoulos, Advances in liver regeneration. Expert review of gastroenterology & hepatology 8.8, 897-907 (2014).
-4.	G. K. Michalopoulos, Principles of liver regeneration and growth homeostasis. Comprehensive physiology 3(1), 485-513 (2013).
-5.	M. J. Foglia, K. D. Poss, Building and re-building the heart by cardiomyocyte proliferation. Development 143, 729-740 (2016). 
-6.	T. Y. Choi, N. Ninov, D. Y. Stainier, D. Shin, Extensive conversion of hepatic biliary epithelial cells to hepatocytes after near total loss of hepatocytes in zebrafish. Gastroenterology 146, 776-788 (2014). 
-7.	J. He, H. Lu, Q. Zou, L. Luo, Regeneration of liver after extreme hepatocyte loss occurs mainly via biliary transdifferentiation in zebrafish. Gastroenterology 146, 789-800 e788 (2014).  
-8.	J. H. Belling, W. Hofmeister, D. C. Andersen, A Systematic Exposition of Methods used for Quantification of Heart Regeneration after Apex Resection in Zebrafish. Cells 9(3), 548 (2020). 
-9.	K. D. Poss, Getting to the heart of regeneration in zebrafish. In Seminars in cell & developmental biology 18(1), 36-45 (2007). 
-
-
+This project aimed to run several clustering algorithms on healthy and ablated liver scRNA-seq data from 10XGenomics. "data" folder contains compressed sample scRNA-seq data from 10XGenomics that could be used to run the pipeline on. In the same folder there is a sample expression matrix which can be obtained from 10XGenomics format. The Seurat pipeline runs on the 10XGenomics format data (that needs to be decompressed in the same folder before running). Meanwhile, scPopCorn and SOM pipelines run on the expression matrix txt files (data1.txt data2.txt).
 
 How to run:
 
-- Seurate clustering script
-1. Seurat_analysis.R
+## Seurate clustering script
 
-- scPopcorn clustering
-1. sh 10XGentsv_and_mtx_to_csv.sh
-2. python weird-to-normal-table.py 
-3. python scPopcorn.py
-4. (perform DE + GSEA with Seurat for the outputted clusters)
+1. Decompressing the data files
 
-- SOM clustering
-1. sh 10XGentsv_and_mtx_to_csv.sh
-2. python weird-to-normal-table.py 
-3. Rscipt SOM.R
+```
+cd data
+unzip T.zip
+unzip NK.zip
+```
+
+2. Run Seurate pipeline that does standard and integrated clustering if the datasets and writes the results in the files (graphs, tables). The enrichment (ORA) results of the provided sample dataset are not significant, that's why it is not going to provide any enrichment results if run on the provided dataset. However, on the actual dataset the same ORA pipeline works.
+
+```
+Rscript Seurat_analysis.R
+```
+## scPopcorn clustering
+
+```
+python scPopcorn.py
+```
+
+## SOM clustering
+
+```
+ Rscipt SOM.R
+```
