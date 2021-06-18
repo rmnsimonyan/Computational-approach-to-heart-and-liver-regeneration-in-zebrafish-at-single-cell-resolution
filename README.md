@@ -4,7 +4,7 @@ This project aimed to run several clustering algorithms on healthy and ablated l
 
 How to run:
 
-## Seurate clustering script
+## Seurat clustering script
 
 1. Decompressing the data files
 
